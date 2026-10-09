@@ -28,7 +28,7 @@ int main() {
         if (z0 > max_altitude) {
             max_altitude = z0;
         }
-        
+
         // acceleration is dependent on fuel amount
         if (fuel > 0) { 
             a = a_thrust - G;
@@ -39,6 +39,18 @@ int main() {
         v0 += a * dt;
         fuel -= 1; // fuel depleted each step
 
+    }
+
+    // print results
+    printf("--- Rocket Telemetry ---\n");
+    printf("Steps: %d Total time: %.1f s\n", max_steps, max_steps * dt);
+    printf("Max altitude: %.1f m\n", max_altitude);
+    printf("Final altitude: %.1f m\n", z0);
+    printf("Final velocity: %.1f m/s\n", v0);
+    printf("Fuel remaining: %.1f\n", fuel);
+    printf("Altitude history (every 10 steps): ");
+    for (int i = 0; i < max_steps; i += 10) {
+        printf("%.2f, ", altitude_history[i]);
     }
 
     return 0;

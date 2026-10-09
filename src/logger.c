@@ -47,8 +47,8 @@ int main() {
         } else a = -G;
 
         // update position and velocity
-        z0 += v0 * dt;
         v0 += a * dt;        
+        z0 += v0 * dt;
     }
 
     // print results

@@ -22,9 +22,18 @@ int main() {
 
     double altitude_history[max_steps];
     double max_altitude = 0;
+
     // loop based on max_steps
     for (int i = 0; i < max_steps; i++) {
         altitude_history[i] = z0;
+
+    
+        // rocket has hit the ground
+        if (z0 < 0) {
+            z0 = 0;
+            max_steps = i; // update max_steps to current step
+            break; 
+        }
 
         // update max altitude during flight
         if (z0 > max_altitude) {
@@ -34,13 +43,12 @@ int main() {
         // acceleration is dependent on fuel amount
         if (fuel > 0) { 
             a = a_thrust - G;
+            fuel -= 1; // fuel depleted each step
         } else a = -G;
 
         // update position and velocity
         z0 += v0 * dt;
-        v0 += a * dt;
-        fuel -= 1; // fuel depleted each step
-
+        v0 += a * dt;        
     }
 
     // print results

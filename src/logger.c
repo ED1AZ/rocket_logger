@@ -1,22 +1,22 @@
 #include <stdio.h>
 
 // gravity constant
-const float G = 9.81;
+const double G = 9.81;
 
 int main() {
     // get user input
-    float z0, v0, fuel, a_thrust, dt, a;
+    double z0, v0, fuel, a_thrust, dt, a;
     int max_steps;
     printf("Enter z0 (m): ");
-    scanf("%f", &z0);
+    scanf("%lf", &z0);
     printf("Enter v0 (m/s): ");
-    scanf("%f", &v0);
+    scanf("%lf", &v0);
     printf("Enter initial fuel (steps): ");
-    scanf("%f", &fuel);
+    scanf("%lf", &fuel);
     printf("Enter engine accel a_thrust (m/s^2): ");
-    scanf("%f", &a_thrust);
+    scanf("%lf", &a_thrust);
     printf("Enter dt (s): ");
-    scanf("%f", &dt);
+    scanf("%lf", &dt);
     printf("Enter max steps: ");
     scanf("%d", &max_steps);
 

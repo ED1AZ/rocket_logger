@@ -7,6 +7,8 @@ int main() {
     // get user input
     float z0, v0, fuel, a_thrust, dt, a;
     int max_steps;
+    printf("Enter z0 (m): ");
+    scanf("%f", &z0);
     printf("Enter v0 (m/s): ");
     scanf("%f", &v0);
     printf("Enter initial fuel (steps): ");

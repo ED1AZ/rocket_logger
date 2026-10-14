@@ -20,7 +20,7 @@ int main() {
     printf("Enter max steps: ");
     scanf("%d", &max_steps);
 
-    double altitude_history[max_steps + 1];
+    double altitude_history[max_steps];
     double max_altitude = 0;
     int steps = 0;
 

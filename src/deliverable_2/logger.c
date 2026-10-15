@@ -3,31 +3,51 @@
 
 // gravity constant
 const double G = 9.81;
+// define constants using values from deliverable 1 example
+#define INITIAL_ALTITUDE 0.0
+#define INITIAL_VELOCITY 0.0
+#define INITIAL_FUEL 50
+#define A_THRUST 15
+#define DT 0.1
+#define MAX_STEPS 300
 
 // determine what the next acceleration and fuel remaining for the rocket 
 void update_sensor_sample(sensor_sample_s *sensor) {
-    sensor->timestamp = 0.0;
+     // increment timestamp
+    sensor->timestamp += DT;
 
     // acceleration is dependent on fuel amount
     if (sensor->fuel > 0) { 
-        sensor->acceleration = sensor-> a_thrust - G;
+        sensor->acceleration = A_THRUST - G;
         sensor->fuel -= 1; // fuel depleted each step
     } else sensor->acceleration = -G;
 }
 
 // take a sensor sample and calculate velocity and altitude
 void update_telemetry_state(const sensor_sample_s *sensor, telemetry_packet_s *telemetry) {
-    telemetry->velocity += sensor->acceleration * dt;        
-    telemetry->altitude += telemetry->velocity * dt;
+    telemetry->velocity += sensor->acceleration * DT;        
+    telemetry->altitude += telemetry->velocity * DT;
 }
 
 static rocket_state state;
 void run_rocket_state(const telemetry_packet_s *telemetry) {
+    switch (state) {
+        case FLIGHT_ASCENT:
+
+            break;
+        case FLIGHT_COAST:
+            break;
+        case FLIGHT_DESCENT:
+            break;
+        case FLIGHT_LANDED:
+            break;
+    }
+
     if (telemetry->altitude > 0) {
-        if (telemetry->velocity > 0) {
+        if (telemetry->sensor->fuel > 0 && telemetry->velocity > 0) {
             state = FLIGHT_ASCENT;
             printf("ascending");
-        } else if (telemetry->velocity == 0) {
+        } else if (telemetry->sensor->fuel == 0 && telemetry->velocity > 0) {
             state = FLIGHT_COAST;
             printf("coasting");
         } else {
@@ -41,34 +61,19 @@ void run_rocket_state(const telemetry_packet_s *telemetry) {
     }
 }
 
-// define constants using values from deliverable 1 example
-#define INITIAL_ALTITUDE 0.0
-#define INITIAL_VELOCITY 0.0
-#define INITIAL_FUEL 50
-#define A_THRUST 15
-#define DT 0.1
-#define MAX_STEPS 300
+
 
 int main() {
-    // get user input
-    double z0, v0, fuel, a_thrust, dt, a;
-    int max_steps;
-    printf("Enter z0 (m): ");
-    scanf("%lf", &z0);
-    printf("Enter v0 (m/s): ");
-    scanf("%lf", &v0);
-    printf("Enter initial fuel (steps): ");
-    scanf("%lf", &fuel);
-    printf("Enter engine accel a_thrust (m/s^2): ");
-    scanf("%lf", &a_thrust);
-    printf("Enter dt (s): ");
-    scanf("%lf", &dt);
-    printf("Enter max steps: ");
-    scanf("%d", &max_steps);
-
+    // variable declarations
+    double z0 = INITIAL_ALTITUDE, v0 = INITIAL_VELOCITY, fuel = INITIAL_FUEL, a_thrust = A_THRUST, dt = DT;
+    const int max_steps = MAX_STEPS;
     double altitude_history[max_steps];
-    double max_altitude = 0;
+    double max_altitude = INITIAL_ALTITUDE;
     int steps = 0;
+
+        while (state != FLIGHT_LANDED) {
+        // update sensor sample
+        }
 
     // loop based on max_steps
     for (int i = 0; i < max_steps; i++) {

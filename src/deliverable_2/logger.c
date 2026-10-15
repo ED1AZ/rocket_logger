@@ -41,7 +41,13 @@ void run_rocket_state(const telemetry_packet_s *telemetry) {
     }
 }
 
-
+// define constants using values from deliverable 1 example
+#define INITIAL_ALTITUDE 0.0
+#define INITIAL_VELOCITY 0.0
+#define INITIAL_FUEL 50
+#define A_THRUST 15
+#define DT 0.1
+#define MAX_STEPS 300
 
 int main() {
     // get user input

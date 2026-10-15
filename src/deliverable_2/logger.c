@@ -15,6 +15,13 @@ void update_sensor_sample(sensor_sample_s *sensor) {
     } else sensor->acceleration = -G;
 }
 
+// take a sensor sample and calculate velocity and altitude
+void update_telemetry_state(const sensor_sample_s *sensor, telemetry_packet_s *telemetry) {
+    telemetry->velocity += sensor->acceleration * dt;        
+    telemetry->altitude += telemetry->velocity * dt;
+}
+
+
 int main() {
     // get user input
     double z0, v0, fuel, a_thrust, dt, a;

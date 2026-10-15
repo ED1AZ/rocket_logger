@@ -29,35 +29,34 @@ void update_telemetry_state(const sensor_sample_s *sensor, telemetry_packet_s *t
     telemetry->altitude += telemetry->velocity * DT;
 }
 
-static rocket_state state;
+// initial state of the rocket is landed (z0 = 0)
+static rocket_state state = FLIGHT_LANDED;
 void run_rocket_state(const telemetry_packet_s *telemetry) {
     switch (state) {
+        case FLIGHT_LANDED:
+            if (telemetry->altitude > 0) {
+                state = FLIGHT_ASCENT;
+                printf("ascending");
+            }
+            break;
         case FLIGHT_ASCENT:
-
+            if (telemetry->sensor->fuel == 0 && telemetry->velocity > 0) {
+                state = FLIGHT_COAST;
+                printf("coasting");
+            }
             break;
         case FLIGHT_COAST:
+            if (telemetry->velocity <= 0) {
+                state = FLIGHT_DESCENT;
+                printf("descending");
+            }
             break;
         case FLIGHT_DESCENT:
+            if (telemetry->altitude <= 0) {
+                state = FLIGHT_LANDED;
+                printf("landed");
+            }
             break;
-        case FLIGHT_LANDED:
-            break;
-    }
-
-    if (telemetry->altitude > 0) {
-        if (telemetry->sensor->fuel > 0 && telemetry->velocity > 0) {
-            state = FLIGHT_ASCENT;
-            printf("ascending");
-        } else if (telemetry->sensor->fuel == 0 && telemetry->velocity > 0) {
-            state = FLIGHT_COAST;
-            printf("coasting");
-        } else {
-            state = FLIGHT_DESCENT;
-            printf("descending");
-        }
-    } else {
-        // altitude = 0
-        state = FLIGHT_LANDED;
-        printf("landed");
     }
 }
 

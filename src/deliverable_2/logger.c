@@ -1,7 +1,19 @@
 #include <stdio.h>
+#include "main.h"
 
 // gravity constant
 const double G = 9.81;
+
+// determine what the next acceleration and fuel remaining for the rocket 
+void update_sensor_sample(sensor_sample_s *sensor) {
+    sensor->timestamp = 0.0;
+
+    // acceleration is dependent on fuel amount
+    if (sensor->fuel > 0) { 
+        sensor->acceleration = sensor-> a_thrust - G;
+        sensor->fuel -= 1; // fuel depleted each step
+    } else sensor->acceleration = -G;
+}
 
 int main() {
     // get user input

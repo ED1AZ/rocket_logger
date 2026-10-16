@@ -36,10 +36,21 @@ void update_telemetry_state(const sensor_sample_s *sensor, telemetry_packet_s *t
     }
 }
 
-// initial state of the rocket is landed (z0 = 0)
-static rocket_state state = FLIGHT_LANDED;
+// initial state of the rocket is prelaunch
+static rocket_state state = FLIGHT_PRELAUNCH;
 void run_rocket_state(const telemetry_packet_s *telemetry) {
     switch (state) {
+        // added prelaunch state
+        case FLIGHT_PRELAUNCH:
+            if (telemetry->altitude > 0) {
+                state = FLIGHT_ASCENT;
+                printf("ascending\n");
+            } else if (telemetry->sensor.fuel <= 0) {
+                // never going to lift off if not enough fuel
+                state = FLIGHT_LANDED;
+                printf("failed to launch\n");
+            }
+            break;
         case FLIGHT_LANDED:
             if (telemetry->altitude > 0) {
                 state = FLIGHT_ASCENT;
@@ -83,18 +94,20 @@ int main() {
     sensor_sample_s sensor = {0.0, INITIAL_FUEL, 0.0};
     telemetry_packet_s telemetry = {sensor, INITIAL_VELOCITY, INITIAL_ALTITUDE};
 
-        while (state != FLIGHT_LANDED) {
-            // update sensor sample
-            update_sensor_sample(&sensor);
-            // update telemetry state
-            update_telemetry_state(&sensor, &telemetry);
-            // update rocket state
-            run_rocket_state(&telemetry);
-        }
+    // start launch sequence
+    // added launched variable to ensure that 
+    int launched = 0;
+    do {
+        update_sensor_sample(&sensor);
+        update_telemetry_state(&sensor, &telemetry);
+        run_rocket_state(&telemetry);
 
-    // // store final altitude and check for max altitude (if max_steps is hit while climbing)
-    // altitude_history[max_steps] = z0;            
-    // if (z0 > max_altitude) max_altitude = z0;    
+        if (state != FLIGHT_LANDED) launched = 1;   
+
+        if (telemetry.altitude > max_altitude) max_altitude = telemetry.altitude;
+        if (steps < max_steps) altitude_history[steps] = telemetry.altitude;
+        steps++;
+    } while ((state != FLIGHT_LANDED || (!launched && sensor.fuel > 0)) && steps < max_steps);
 
     // print results
     printf("--- Rocket Telemetry ---\n");

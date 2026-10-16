@@ -15,6 +15,7 @@ typedef struct {
 } telemetry_packet_s;
 
 typedef enum {
+    FLIGHT_PRELAUNCH,
     FLIGHT_ASCENT,
     FLIGHT_COAST,
     FLIGHT_DESCENT,

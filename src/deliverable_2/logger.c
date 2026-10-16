@@ -25,12 +25,13 @@ void update_sensor_sample(sensor_sample_s *sensor) {
 
 // take a sensor sample and calculate velocity and altitude
 void update_telemetry_state(const sensor_sample_s *sensor, telemetry_packet_s *telemetry) {
+    telemetry->sensor = *sensor;
     telemetry->velocity += sensor->acceleration * DT;        
     telemetry->altitude += telemetry->velocity * DT;
 }
 
 // initial state of the rocket is landed (z0 = 0)
-static rocket_state state = FLIGHT_LANDED;
+static rocket_state state;
 void run_rocket_state(const telemetry_packet_s *telemetry) {
     switch (state) {
         case FLIGHT_LANDED:
@@ -40,7 +41,7 @@ void run_rocket_state(const telemetry_packet_s *telemetry) {
             }
             break;
         case FLIGHT_ASCENT:
-            if (telemetry->sensor->fuel == 0 && telemetry->velocity > 0) {
+            if (telemetry->sensor.fuel == 0 && telemetry->velocity > 0) {
                 state = FLIGHT_COAST;
                 printf("coasting");
             }
@@ -57,6 +58,9 @@ void run_rocket_state(const telemetry_packet_s *telemetry) {
                 printf("landed");
             }
             break;
+        default:
+            printf("Error: Invalid rocket state\n");
+            break;
     }
 }
 
@@ -70,52 +74,33 @@ int main() {
     double max_altitude = INITIAL_ALTITUDE;
     int steps = 0;
 
+    sensor_sample_s sensor = {0.0, INITIAL_FUEL, 0.0};
+    telemetry_packet_s telemetry = {sensor, INITIAL_VELOCITY, INITIAL_ALTITUDE};
+
         while (state != FLIGHT_LANDED) {
-        // update sensor sample
+            // update sensor sample
+            update_sensor_sample(&sensor);
+            // update telemetry state
+            update_telemetry_state(&sensor, &telemetry);
+            // update rocket state
+            run_rocket_state(&telemetry);
         }
 
-    // loop based on max_steps
-    for (int i = 0; i < max_steps; i++) {
-        altitude_history[i] = z0;
-
-        // update max altitude during flight
-        if (z0 > max_altitude) {
-            max_altitude = z0;
-        }
-
-        // acceleration is dependent on fuel amount
-        if (fuel > 0) { 
-            a = a_thrust - G;
-            fuel -= 1; // fuel depleted each step
-        } else a = -G;
-
-        // update position, velocity, steps
-        v0 += a * dt;        
-        z0 += v0 * dt;
-        steps = i + 1;
-
-        // touchdown with clamp
-        if (z0 <= 0 && v0 <= 0) {
-            z0 = 0;              
-            break;
-        }
-    }
-
-    // store final altitude and check for max altitude (if max_steps is hit while climbing)
-    altitude_history[max_steps] = z0;            
-    if (z0 > max_altitude) max_altitude = z0;    
+    // // store final altitude and check for max altitude (if max_steps is hit while climbing)
+    // altitude_history[max_steps] = z0;            
+    // if (z0 > max_altitude) max_altitude = z0;    
 
     // print results
     printf("--- Rocket Telemetry ---\n");
     printf("Steps: %d Total time: %.1f s\n", steps, steps * dt);
     printf("Max altitude: %.1f m\n", max_altitude);
-    printf("Final altitude: %.1f m\n", z0);
-    printf("Final velocity: %.1f m/s\n", v0);
-    printf("Fuel remaining: %.1f\n", fuel);
+    printf("Final altitude: %.1f m\n", telemetry.altitude);
+    printf("Final velocity: %.1f m/s\n", telemetry.velocity);
+    printf("Fuel remaining: %.1f\n", sensor.fuel);
     printf("Altitude history (every 10 steps): ");
-    for (int i = 0; i <= steps; i += 10) {
-        printf("%.2f, ", altitude_history[i]);
-    }
+    // for (int i = 0; i <= steps; i += 10) {
+    //     printf("%.2f, ", altitude_history[i]);
+    // }
 
     return 0;
 }

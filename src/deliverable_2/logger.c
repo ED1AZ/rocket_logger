@@ -89,6 +89,7 @@ int main() {
     double z0 = INITIAL_ALTITUDE, v0 = INITIAL_VELOCITY, fuel = INITIAL_FUEL, a_thrust = A_THRUST, dt = DT;
     const int max_steps = MAX_STEPS;
     double altitude_history[max_steps];
+    altitude_history[0] = z0;
     double max_altitude = INITIAL_ALTITUDE;
     int steps = 0;
 
@@ -101,7 +102,7 @@ int main() {
         run_rocket_state(&telemetry);
 
         if (telemetry.altitude > max_altitude) max_altitude = telemetry.altitude;
-        if (steps < max_steps) altitude_history[steps] = telemetry.altitude;
+        if (steps < max_steps) altitude_history[steps + 1] = telemetry.altitude;
         steps++;
     }
 

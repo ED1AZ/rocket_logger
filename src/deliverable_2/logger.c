@@ -40,7 +40,9 @@ void update_telemetry_state(const sensor_sample_s *sensor, telemetry_packet_s *t
 static rocket_state state = FLIGHT_PRELAUNCH;
 void run_rocket_state(const telemetry_packet_s *telemetry) {
     switch (state) {
-        // added prelaunch state
+        // previously, state was initialized to FLIGHT_LANDED, but this makes the while loop not run
+        // did not initialize state to FLIGHT_ASCENT in case there is not enough fuel
+        // so, added FLIGHT_PRELAUNCH state to check if flight is able to lift off
         case FLIGHT_PRELAUNCH:
             if (telemetry->altitude > 0) {
                 state = FLIGHT_ASCENT;
@@ -94,20 +96,15 @@ int main() {
     sensor_sample_s sensor = {0.0, INITIAL_FUEL, 0.0};
     telemetry_packet_s telemetry = {sensor, INITIAL_VELOCITY, INITIAL_ALTITUDE};
 
-    // start launch sequence
-    // added launched variable to ensure that 
-    int launched = 0;
-    do {
+    while (state != FLIGHT_LANDED && steps < max_steps) {
         update_sensor_sample(&sensor);
         update_telemetry_state(&sensor, &telemetry);
         run_rocket_state(&telemetry);
 
-        if (state != FLIGHT_LANDED) launched = 1;   
-
         if (telemetry.altitude > max_altitude) max_altitude = telemetry.altitude;
         if (steps < max_steps) altitude_history[steps] = telemetry.altitude;
         steps++;
-    } while ((state != FLIGHT_LANDED || (!launched && sensor.fuel > 0)) && steps < max_steps);
+    }
 
     // print results
     printf("--- Rocket Telemetry ---\n");

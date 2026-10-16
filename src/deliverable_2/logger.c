@@ -56,25 +56,25 @@ void run_rocket_state(const telemetry_packet_s *telemetry) {
         case FLIGHT_LANDED:
             if (telemetry->altitude > 0) {
                 state = FLIGHT_ASCENT;
-                printf("ascending");
+                printf("ascending\n");
             }
             break;
         case FLIGHT_ASCENT:
             if (telemetry->sensor.fuel <= 0 && telemetry->velocity > 0) {
                 state = FLIGHT_COAST;
-                printf("coasting");
+                printf("coasting\n");
             }
             break;
         case FLIGHT_COAST:
             if (telemetry->velocity <= 0) {
                 state = FLIGHT_DESCENT;
-                printf("descending");
+                printf("descending\n");
             }
             break;
         case FLIGHT_DESCENT:
             if (telemetry->altitude <= 0) {
                 state = FLIGHT_LANDED;
-                printf("landed");
+                printf("landed\n");
             }
             break;
         default:
@@ -114,9 +114,9 @@ int main() {
     printf("Final velocity: %.1f m/s\n", telemetry.velocity);
     printf("Fuel remaining: %.1f\n", sensor.fuel);
     printf("Altitude history (every 10 steps): ");
-    // for (int i = 0; i <= steps; i += 10) {
-    //     printf("%.2f, ", altitude_history[i]);
-    // }
+    for (int i = 0; i <= steps; i += 10) {
+        printf("%.2f, ", altitude_history[i]);
+    }
 
     return 0;
 }

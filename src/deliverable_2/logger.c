@@ -86,7 +86,7 @@ void run_rocket_state(const telemetry_packet_s *telemetry) {
 
 int main() {
     // variable declarations
-    double z0 = INITIAL_ALTITUDE, v0 = INITIAL_VELOCITY, fuel = INITIAL_FUEL, a_thrust = A_THRUST, dt = DT;
+    double z0 = INITIAL_ALTITUDE, dt = DT;
     const int max_steps = MAX_STEPS;
     double altitude_history[max_steps];
     altitude_history[0] = z0;

@@ -30,9 +30,8 @@ void update_telemetry_state(const sensor_sample_s *sensor, telemetry_packet_s *t
     telemetry->altitude += telemetry->velocity * DT;
 
     // clamping altitude and velocity
-    if (telemetry->altitude <= 0) {
+    if (telemetry->altitude <= 0 && telemetry->velocity <= 0) {
         telemetry->altitude = 0;
-        if (telemetry->velocity < 0) telemetry->velocity = 0;
     }
 }
 

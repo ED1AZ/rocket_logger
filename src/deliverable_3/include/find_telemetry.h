@@ -1,5 +1,5 @@
 #pragma once
-#include "include/sensor.h"
+#include "sensor.h"
 
 typedef struct {
     sensor_sample_s sensor;

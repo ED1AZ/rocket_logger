@@ -1,6 +1,6 @@
 #pragma once
 #include <stdint.h>
-#include "include/buffer.h"
+#include "buffer.h"
 
 typedef struct {
     double acceleration;

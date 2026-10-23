@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include <stdbool.h>
-#include "include/find_telemetry.h"
+#include "find_telemetry.h"
 
 typedef enum {
     FLIGHT_PRELAUNCH,

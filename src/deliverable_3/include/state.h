@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include "include/find_telemetry.h"
 
 typedef enum {
     FLIGHT_PRELAUNCH,

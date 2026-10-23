@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include <stdbool.h>
 #include "include/find_telemetry.h"
 
 typedef enum {
@@ -11,3 +12,5 @@ typedef enum {
 } rocket_state;
 
 void run_rocket_state(const telemetry_packet_s *telemetry);
+void run_state_task(void);
+bool rocket_has_landed(void);

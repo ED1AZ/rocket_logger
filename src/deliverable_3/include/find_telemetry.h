@@ -14,3 +14,4 @@ ring_buffer *get_sensor_buffer();
 ring_buffer *get_telemetry_buffer();
 void telemetry_init_rb();
 void find_telemetry_task();
+void get_newest_telemetry(telemetry_packet_s *out);

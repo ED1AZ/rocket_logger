@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "include/state.h"
+#include <stdbool.h>
 
 static rocket_state state = FLIGHT_PRELAUNCH;
 
@@ -43,4 +44,18 @@ void run_rocket_state(const telemetry_packet_s *telemetry) {
             printf("Error: Invalid rocket state\n");
             break;
     }
+}
+
+// change state based off latest telemetry packet
+void run_state_task(void) {
+    printf("Rocket state running\n");
+
+    telemetry_packet_s newest;
+    get_newest_telemetry(&newest);
+    run_rocket_state(&newest);
+}
+
+// check rocket state so that main.c can access it
+bool rocket_has_landed(void) {
+    return state == FLIGHT_LANDED;
 }

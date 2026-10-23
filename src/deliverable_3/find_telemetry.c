@@ -12,9 +12,10 @@ void update_telemetry_state(const sensor_sample_s *sensor, telemetry_packet_s *t
     telemetry->velocity += sensor->acceleration * DT;        
     telemetry->altitude += telemetry->velocity * DT;
 
-    // clamping altitude
+    // clamping altitude and velocity
     if (telemetry->altitude <= 0 && telemetry->velocity <= 0) {
         telemetry->altitude = 0;
+        telemetry->velocity = 0;
     }
 }
 
@@ -29,7 +30,7 @@ ring_buffer *get_telemetry_buffer() {
 void find_telemetry_task() {
     ring_buffer *sensor_buffer = get_sensor_buffer();
     sensor_sample_s sample;
-    
+
     while (pop(sensor_buffer, &sample) == 0) {
         update_telemetry_state(&sample, &telemetry);
         push_discard_newest(&telemetry_buffer, &telemetry);

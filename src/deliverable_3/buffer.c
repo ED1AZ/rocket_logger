@@ -2,6 +2,16 @@
 #include <string.h>
 #include "include/buffer.h"
 
+// initialize buffer depending on data type
+void rb_init(ring_buffer *rb, void *storage, size_t element_size, size_t max) {
+    rb->buffer = storage;
+    rb->element_size = element_size;
+    rb->max = max;
+    rb->head = 0;
+    rb->tail = 0;
+}
+
+
 // used by find_telemetry
 int push_discard_newest(ring_buffer *rb, const void *data) {
     int next;

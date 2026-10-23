@@ -6,6 +6,7 @@ typedef struct {
     size_t head;  // write
     size_t tail;  // read
     size_t max;   
+    size_t element_size; // for memcpy
 } ring_buffer;
 
 // used by find_telemetry

@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <string.h>
 #include "include/buffer.h"
 
 // used by find_telemetry
@@ -23,7 +24,9 @@ int pop(ring_buffer *rb, void *out) {
     if (next >= rb->max) next = 0;
 
     // pop from buffer and read into output
-    *out = rb->buffer[rb->tail];
+    // memcpy to make generic buffer pop function (usable for both sensor and telemetry)
+    // memcpy: addr of destination, src, size
+    memcpy(out, &rb->buffer[rb->tail * rb->element_size], rb->element_size);
     rb->tail = next;
     return 0;
 }

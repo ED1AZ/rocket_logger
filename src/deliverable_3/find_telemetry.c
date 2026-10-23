@@ -35,3 +35,7 @@ void find_telemetry_task() {
         rb_push_discard_newest(&telemetry_buffer, &telemetry);
     }
 }
+
+void get_newest_telemetry(telemetry_packet_s *out) {
+    *out = telemetry;
+}

@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include <stdio.h>
 
 typedef struct {
     uint8_t *buffer; // pointer to buffer storage 

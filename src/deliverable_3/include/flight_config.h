@@ -8,3 +8,6 @@
 #define A_THRUST 15
 #define DT 0.1
 #define MAX_STEPS 300
+
+// buffer stuff
+#define SENSOR_BUFFER_SIZE 16

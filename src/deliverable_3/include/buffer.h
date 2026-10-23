@@ -10,8 +10,8 @@ typedef struct {
 } ring_buffer;
 
 // used by find_telemetry
-void push_discard_newest(ring_buffer *rb, const void *data);
+int push_discard_newest(ring_buffer *rb, const void *data);
 // used by sensor update
-void push_overwrite_oldest(ring_buffer *rb, const void *data);
+int push_overwrite_oldest(ring_buffer *rb, const void *data);
 
-void pop(ring_buffer *rb, void *out);
+int pop(ring_buffer *rb, void *out);

@@ -11,3 +11,4 @@
 
 // buffer stuff
 #define SENSOR_BUFFER_SIZE 16
+#define TELEMETRY_BUFFER_SIZE 16

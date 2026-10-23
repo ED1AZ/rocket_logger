@@ -15,7 +15,7 @@
 
 // task scheduling intervals, in ms
 // frequenchy Hz = 1000/ms
-#define SENSOR_INTERVAL 10 
-#define TELEMETRY_INTERVAL 40
-#define PRINT_INTERVAL 100
-#define STATE_INTERVAL 50
+#define SENSOR_INTERVAL 100 // 0.1 s
+#define TELEMETRY_INTERVAL 400
+#define PRINT_INTERVAL 800
+#define STATE_INTERVAL 200

@@ -27,12 +27,12 @@ ring_buffer *get_telemetry_buffer() {
 }
 
 void find_telemetry_task() {
-    ring_buffer *sensor_buffer = sample_sensor_get_buffer();
+    ring_buffer *sensor_buffer = get_sensor_buffer();
     sensor_sample_s sample;
 
-    while (rb_pop(sensor_buffer, &sample)) {
+    while (pop(sensor_buffer, &sample)) {
         update_telemetry_state(&sample, &telemetry);
-        rb_push_discard_newest(&telemetry_buffer, &telemetry);
+        push_discard_newest(&telemetry_buffer, &telemetry);
     }
 }
 

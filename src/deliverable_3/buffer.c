@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
 #include "include/buffer.h"
 
 // initialize buffer depending on data type
@@ -13,7 +14,7 @@ void rb_init(ring_buffer *rb, void *storage, size_t element_size, size_t max) {
 
 // used by find_telemetry
 int push_discard_newest(ring_buffer *rb, const void *data) {
-    int next;
+    size_t next;
     next = rb->head + 1;
 
     if (next >= rb->max) next = 0; // circle back if max hit
@@ -28,7 +29,7 @@ int push_discard_newest(ring_buffer *rb, const void *data) {
 
 // used by sensor update
 int push_overwrite_oldest(ring_buffer *rb, const void *data) {
-    int next;
+    size_t next;
     next = rb->head + 1;
 
     if (next >= rb->max) next = 0; // circle back if max hit
@@ -45,7 +46,7 @@ int push_overwrite_oldest(ring_buffer *rb, const void *data) {
 }
 
 int pop(ring_buffer *rb, void *out) {
-    int next;
+    size_t next;
 
     // check if empty
     if (rb->head == rb->tail) return -1;

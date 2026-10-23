@@ -29,7 +29,7 @@ ring_buffer *get_sensor_buffer() {
 }
 
 void sample_sensor_task() {
-    printf("Sample sensor task");
+    printf("\nSample sensor task\n");
     update_sensor_sample(&sensor);
     push_overwrite_oldest(&sensor_buffer, &sensor);
 }

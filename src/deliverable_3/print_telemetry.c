@@ -4,7 +4,7 @@
 void print_telemetry_task() {
     ring_buffer *telemetry_buffer = get_telemetry_buffer();
     telemetry_packet_s p;
-    printf("TELEMETRY PRINTING");
+    printf("\nTelemetry printing task\n");
 
     // print telemetry values while popping 
     while (pop(telemetry_buffer, &p) == 0) {

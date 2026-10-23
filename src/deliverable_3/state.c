@@ -48,7 +48,7 @@ void run_rocket_state(const telemetry_packet_s *telemetry) {
 
 // change state based off latest telemetry packet
 void run_state_task(void) {
-    printf("Rocket state running\n");
+    printf("\nRocket state running\n");
 
     telemetry_packet_s newest;
     get_newest_telemetry(&newest);

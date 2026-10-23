@@ -29,8 +29,8 @@ ring_buffer *get_telemetry_buffer() {
 void find_telemetry_task() {
     ring_buffer *sensor_buffer = get_sensor_buffer();
     sensor_sample_s sample;
-
-    while (pop(sensor_buffer, &sample)) {
+    
+    while (pop(sensor_buffer, &sample) == 0) {
         update_telemetry_state(&sample, &telemetry);
         push_discard_newest(&telemetry_buffer, &telemetry);
     }
